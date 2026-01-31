@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { isDarkModeAtom } from '@/lib/jotai';
 import { BlockNoteSchema, defaultBlockSpecs } from '@blocknote/core';
 import { ko, en } from '@blocknote/core/locales';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@/hooks/useLocale';
 import { useLingui } from '@lingui/react/macro';
 import { useCreateBlockNote } from '@/components/common/BlockNoteEditor';
 import { BlockNoteWrapper } from '@/components/common/BlockNoteEditor';

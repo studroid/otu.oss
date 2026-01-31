@@ -532,11 +532,14 @@ const pages = useFoldersData();
 
 ```typescript
 // Client
-import { useTranslations } from 'next-intl';
-const t = useTranslations('namespace');
+import { useLingui } from '@lingui/react/macro';
+const { t } = useLingui();
+t`텍스트`;
 
-// Server
-const t = await getTranslations('namespace');
+// Server (API routes)
+import { getServerI18n } from '@/i18n-server';
+const i18n = await getServerI18n(locale);
+i18n._(msg`텍스트`);
 ```
 
 #### 4. Error Handling

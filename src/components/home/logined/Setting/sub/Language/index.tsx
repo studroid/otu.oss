@@ -15,7 +15,7 @@ import {
     AccordionDetails,
     Typography,
 } from '@mui/material';
-import { getUserLocale, setUserLocale } from '@/i18n';
+import { getUserLocale, setUserLocale } from '@/i18n-server';
 import { Locale } from '@/functions/constants';
 import { getClientLocale, setClientLocale } from '@/functions/cookie';
 import { useRouter } from 'next/navigation';

@@ -1,8 +1,8 @@
 import s from '@/components/layout/bottom/agreement/docs/docDialog.module.css';
-import { getLocale } from 'next-intl/server';
+import { getUserLocale } from '@/i18n-server';
 
 export default async function Page() {
-    const locale = await getLocale();
+    const locale = await getUserLocale();
 
     const [{ termsOfService }, { privacyPolicy }, { marketing }] = await Promise.all([
         import(`@/components/layout/bottom/agreement/docs/${locale}/terms-of-service_2024_6_20`),

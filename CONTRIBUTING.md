@@ -245,11 +245,11 @@ function ComponentName(): JSX.Element {
 모든 UI 텍스트는 다국어 처리가 필요합니다.
 
 ```typescript
-import { useTranslations } from 'next-intl';
+import { useLingui } from '@lingui/react/macro';
 
 function MyComponent() {
-    const t = useTranslations('namespace');
-    return <div>{t('key')}</div>;
+    const { t } = useLingui();
+    return <div>{t`안녕하세요`}</div>;
 }
 ```
 

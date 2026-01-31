@@ -322,9 +322,9 @@ localStorage.debug = 'sync,editor,chat'
 │   ├── migrations/       # DB 마이그레이션
 │   └── ...
 │
-└── messages/              # 다국어 지원
-    ├── ko.json           # 한국어
-    └── en.json           # 영어
+└── locales/               # 다국어 지원 (LinguiJS PO 카탈로그)
+    ├── ko/messages.po    # 한국어
+    └── en/messages.po    # 영어
 ```
 
 ### 핵심 아키텍처 패턴
@@ -539,12 +539,16 @@ const pages = useFoldersData();
 #### 3. 다국어 처리
 
 ```typescript
-// 클라이언트
-import { useTranslations } from 'next-intl';
-const t = useTranslations('namespace');
+// 클라이언트 컴포넌트 & 서버 컴포넌트(RSC)
+import { useLingui } from '@lingui/react/macro';
+const { t } = useLingui();
+return <div>{t`안녕하세요`}</div>;
 
-// 서버
-const t = await getTranslations('namespace');
+// API 라우트 (React 컴포넌트가 아닌 곳)
+import { getServerI18n } from '@/i18n-server';
+import { msg } from '@lingui/core/macro';
+const i18n = await getServerI18n(locale);
+const text = i18n._(msg`안녕하세요`);
 ```
 
 #### 4. 에러 처리

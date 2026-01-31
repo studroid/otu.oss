@@ -137,9 +137,10 @@ src/
 
 #### 국제화
 
-- Next-intl (한국어/영어)
-- `src/messages/` 디렉토리
-- 사용법: `const t = useTranslations('namespace')`
+- LinguiJS (한국어/영어)
+- `src/locales/` 디렉토리 (PO 카탈로그)
+- 클라이언트/RSC: `import { useLingui } from '@lingui/react/macro'` → `const { t } = useLingui()` → `` t`텍스트` ``
+- API 라우트: `import { getServerI18n } from '@/i18n-server'` → ``i18n._(msg`텍스트`)``
 
 ## 코드 스타일
 

@@ -21,9 +21,12 @@ jest.mock('@/functions/uploadcare', () => ({
     deleteFiles: jest.fn(),
 }));
 
-// next-intl 모킹
-jest.mock('next-intl/server', () => ({
-    getTranslations: jest.fn().mockImplementation(() => (key: string) => key),
+// LinguiJS 모킹
+jest.mock('@/lib/lingui', () => ({
+    getServerI18n: jest.fn<() => Promise<{ _: (descriptor: any) => string }>>().mockResolvedValue({
+        _: (descriptor: any) =>
+            typeof descriptor === 'string' ? descriptor : descriptor.id || 'translated',
+    }),
 }));
 
 // Sentry 모킹

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useCreateBlockNote } from '@blocknote/react';
 import { BlockNoteWrapper } from '@/components/common/BlockNoteEditor';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@/hooks/useLocale';
 import { ko, en } from '@blocknote/core/locales';
 
 interface BlockNoteClientProps {

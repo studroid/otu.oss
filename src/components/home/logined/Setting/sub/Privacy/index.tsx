@@ -10,7 +10,7 @@ import {
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import s from '@/components/layout/bottom/agreement/docs/docDialog.module.css';
 import { useEffect, useState } from 'react';
-import { getUserLocale } from '@/i18n';
+import { getUserLocale } from '@/i18n-server';
 import { DIALOG_BREAKPOINT } from '@/functions/constants';
 
 interface ConsentDialogProps {

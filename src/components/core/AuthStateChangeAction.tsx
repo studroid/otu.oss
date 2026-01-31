@@ -6,10 +6,6 @@ import { createClient } from '@/supabase/utils/client';
 import { authLogger } from '@/debug/auth';
 
 export function AuthStateChangeAction() {
-    // const openSnackbar = useSetAtom(openSnackbarState);
-    // const t = useTranslations('auth');
-    // const router = useRouter();
-
     useEffect(function handleAuthStateChange() {
         const supabase = createClient();
         supabase.auth.onAuthStateChange((event, session) => {

@@ -10,9 +10,10 @@ jest.mock('@/i18n-server', () => ({
     getUserLocale: jest.fn().mockResolvedValue('ko'),
 }));
 
-jest.mock('next-intl/server', () => ({
-    getTranslations: jest.fn().mockResolvedValue({
-        raw: (key: 'title' | 'body') => (key === 'title' ? '샘플 제목' : '<p>본문</p>'),
+jest.mock('@/lib/lingui', () => ({
+    getServerI18n: jest.fn().mockResolvedValue({
+        _: (descriptor: any) =>
+            typeof descriptor === 'string' ? descriptor : descriptor.id || '샘플 텍스트',
     }),
 }));
 

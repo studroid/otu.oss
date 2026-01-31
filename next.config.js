@@ -1,4 +1,3 @@
-const createNextIntlPlugin = require('next-intl/plugin');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
     analyzerMode: process.env.ANALYZE_JSON === 'true' ? 'json' : 'static',
@@ -81,8 +80,6 @@ const nextConfig = {
     productionBrowserSourceMaps: false,
 };
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
-
 module.exports = async (phase, { defaultConfig }) => {
-    return withBundleAnalyzer(withNextIntl(nextConfig));
+    return withBundleAnalyzer(nextConfig);
 };

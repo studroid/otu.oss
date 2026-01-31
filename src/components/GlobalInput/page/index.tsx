@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from 'react';
 import TextArea from '../TextArea';
 import Wrapper from '../wrapper';
 import { ulid } from 'ulid';
-import { useTranslations } from 'use-intl';
+import { useLingui } from '@lingui/react/macro';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
@@ -69,7 +69,7 @@ export default function QuickNoteInput() {
         [key: string]: { prepend: boolean; append: boolean };
     }>({});
     const darkPrefix = darkMode ? '/dark' : '';
-    const t = useTranslations();
+    const { t } = useLingui();
     const [suggestions, setSuggestions] = useState<similarityResponse[]>([]);
     const textRef = useRef<HTMLDivElement>(null);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -230,7 +230,7 @@ export default function QuickNoteInput() {
                         // 붙여넣기된 내용은 전체가 본문으로 처리
                         let bodyPart = content;
                         // 임시 제목 설정
-                        let titlePart = t('uploader.writing-a-title');
+                        let titlePart = t`제목 작성 중...`;
 
                         // 이미지가 포함되어 있는지 확인
                         const hasImage = content.includes('<img');
@@ -314,21 +314,13 @@ export default function QuickNoteInput() {
                                     editorOcrLogger('제목 생성 오류', { error });
                                     console.error('제목 생성 오류:', error);
                                     openSnackbar({
-                                        message: t(
-                                            'uploader.couldnt-generate-a-title-automatically-please-enter-a-title'
-                                        ),
+                                        message: t`제목을 자동으로 생성할 수 없습니다. 제목을 입력해 주세요.`,
                                     });
                                 }
                             }
                         } else {
                             // 이미지가 없는 경우 "제목 없음"으로 설정
-                            await editSubmitHandler(
-                                t('uploader.untitled'),
-                                bodyPart,
-                                false,
-                                pageId,
-                                'text'
-                            );
+                            await editSubmitHandler(t`제목 없음`, bodyPart, false, pageId, 'text');
                         }
                     }}
                     onEnter={async (evt) => {
@@ -362,9 +354,7 @@ export default function QuickNoteInput() {
                             // 마지막 입력 후 10초 이내이면 입력 차단
                             if (lastSubmitTime > 0 && timeDiff < 10000) {
                                 openSnackbar({
-                                    message: t('editor.rapid-input-limit', {
-                                        seconds: Math.ceil((10000 - timeDiff) / 1000),
-                                    }),
+                                    message: t`너무 빠른 입력입니다. ${Math.ceil((10000 - timeDiff) / 1000)}초 후에 다시 시도해주세요.`,
                                 });
                                 return;
                             }
@@ -398,14 +388,14 @@ export default function QuickNoteInput() {
                                     titlePart = lastCreatePage.title;
                                     updatedBody += `<p>${title.slice(1)}</p>`;
                                     openSnackbar({
-                                        message: t('error.append-to-page', { title: titlePart }),
+                                        message: t`${titlePart}에 내용을 추가했습니다`,
                                     });
                                 } else if (title.endsWith('&')) {
                                     // @ts-ignore
                                     titlePart = lastCreatePage.title;
                                     updatedBody = `<p>${title.slice(0, -1)}</p>` + updatedBody;
                                     openSnackbar({
-                                        message: t('error.prepend-to-page', { title: titlePart }),
+                                        message: t`${titlePart}의 앞에 내용을 추가했습니다`,
                                     });
                                 }
 
@@ -423,13 +413,13 @@ export default function QuickNoteInput() {
                         }
                     }}
                     onBlur={handleBlur}
-                    placeholder={t('editor.please-write-simple-notes-here')}
+                    placeholder={t`간단한 메모는 여기에 작성하세요.`}
                 />
             </Wrapper>
             {suggestions.length > 0 && (
                 <div className={`w-[100%] mb-4`}>
                     <div className="dark:text-white text-[12px] p-2 opacity-50">
-                        {t('editor.weve-found-a-similar-note')}
+                        {t`비슷한 메모에 내용을 추가해보세요.`}
                     </div>
                     {uniqueSuggestions.map((suggestion, index) => (
                         <div
@@ -453,7 +443,7 @@ export default function QuickNoteInput() {
                                     {suggestion.metadata.title}
                                 </div>
                                 <div className="flex items-center">
-                                    <Tooltip title={t('editor.prepend')}>
+                                    <Tooltip title={t`맨 앞에 추가`}>
                                         <IconButton
                                             onClick={() => insertPageToSuggested(suggestion, true)}
                                         >
@@ -468,7 +458,7 @@ export default function QuickNoteInput() {
                                             )}
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip title={t('editor.append')}>
+                                    <Tooltip title={t`끝에 추가`}>
                                         <IconButton
                                             onClick={() => insertPageToSuggested(suggestion, false)}
                                         >

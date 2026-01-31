@@ -7,7 +7,7 @@ import { createClient } from '@/supabase/utils/client';
 import dynamic from 'next/dynamic';
 import { renderLogger } from '@/debug/render';
 import { enhancedRenderLogger } from '@/debug/render';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@/hooks/useLocale';
 import useCheckWatermelondb from '@/functions/hooks/useCheckWatermelondb';
 import { useDeepLinkWebView } from '@/functions/hooks/useDeepLinkWebView';
 import { syncLogger } from '@/debug/sync';

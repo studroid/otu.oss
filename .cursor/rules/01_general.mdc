@@ -45,8 +45,8 @@ aiLogger.log = console.log.bind(console);
 ```
 프론트엔드 로그는 사용자와 상화작용 부분에 종속된 로직은 사용자 상호작용 시작부터 로직이 끝나는 지점까지의 구간을 분명하게 인식할 수 있게 로그를 앞뒤로 넣어줘. 디버깅을 위해서 필요한 로그가 있다면 응답할 때 테스트해야 할 로그를 언급해줘. 클라이언트 예: localStorage.debug = 'sync,editor:index' 서버 예: DEBUG='sync'
 
-# 다국어 
-ui에 포함되는 텍스트는 항상 다국어가 필요한지 파악해줘. 기존에 사용할 수 있는 키가 있다면 그 키를 사용해줘. 없다면 새로운 키를 만들어줘. 
+# 다국어 (LinguiJS)
+ui에 포함되는 텍스트는 항상 다국어가 필요한지 파악해줘. LinguiJS 매크로를 사용해서 `t\`텍스트\`` 형태로 작성해줘. 클라이언트/RSC에서는 `import { useLingui } from '@lingui/react/macro'` → `const { t } = useLingui()`, API 라우트에서는 `getServerI18n` + `msg` 패턴을 사용해줘.
 
 # 절대 하면 안되는 작업
 npx supabase *, npx vercel *, 커밋은 요청이 있을 때 조건부로 진행하고, git push는 절대하지마.

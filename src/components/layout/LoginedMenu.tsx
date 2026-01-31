@@ -13,7 +13,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { createClient, fetchUserId } from '@/supabase/utils/client';
 import { clearStorage } from '@/functions/clearStorage';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@/hooks/useLocale';
 import { useLingui } from '@lingui/react/macro';
 import { Database } from '@/lib/database/types';
 import { isReactNativeWebView } from '@/functions/detectEnvironment';

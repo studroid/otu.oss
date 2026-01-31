@@ -1,6 +1,6 @@
 'use client';
 
-import { getUserLocale } from '@/i18n';
+import { getUserLocale } from '@/i18n-server';
 import { loadMessages } from '@/messages';
 import { useState, useEffect } from 'react';
 
