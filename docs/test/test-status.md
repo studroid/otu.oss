@@ -4,7 +4,7 @@
 
 ## 📊 전체 현황
 
-- **테스트 파일**: 22개 (Jest)
+- **테스트 파일**: 23개 (Jest)
 - **DB 테스트** (pgTAP):
     - `get_dynamic_pages_chunk` 함수 테스트: 9개
 - **통합 테스트** (자체 프레임워크):
@@ -52,6 +52,10 @@
 - `LinkifiedTitle.test.tsx` - 링크화된 제목 컴포넌트
 
 #### Home2 컴포넌트 (React Router 기반)
+
+**위치**: `src/components/Chat/`
+
+- `model.test.ts` - AI 모델 옵션 테스트
 
 **위치**: `src/components/home2/editor/__tests__/`
 
@@ -170,14 +174,14 @@ npm run test:middleware
 
 ### 사용 가능한 로거
 
-`src/debug/` 디렉토리에 42개 로거 파일:
+`src/debug/` 디렉토리에 43개 로거 파일:
 
 - `alarm` - 알람 관련 로그
 - `sync` - 동기화 관련 로그
 - `usage` - 사용량 추적 로그
 - `test` - 테스트 관련 로그
 - `editor` - 에디터 관련 로그
-- 기타 37개 카테고리
+- 기타 38개 카테고리
 
 ### 테스트 시 로거 활성화 방법
 
@@ -284,7 +288,7 @@ npm run test -- --watch
 
 ---
 
-**마지막 업데이트**: 2026-01-31
+**마지막 업데이트**: 2026-02-01
 **테스트 프레임워크**: Jest 30.0.4 (⚠️ Vitest는 사용하지 않음)
 
 **관련 문서**: [CLAUDE.md](../../CLAUDE.md)

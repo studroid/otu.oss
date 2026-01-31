@@ -264,6 +264,7 @@ const translations = useMemo(
 - **자동저장**: `src/components/home2/editor/hooks/useAutoSave.ts`
 - **에디터 상태**: `src/components/home2/editor/hooks/useEditorState.ts`
 - **페이지 저장**: `src/components/home2/editor/hooks/usePageSave.ts`
+- **페이지 데이터**: `src/components/home2/editor/hooks/usePageData.ts`
 - **키보드 단축키**: `src/components/home2/editor/hooks/useKeyboardShortcuts.ts`
 
 ### 레거시 에디터 (home - 마이그레이션 중)
