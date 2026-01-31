@@ -22,14 +22,15 @@
 - 드래그 앤 드롭 이미지 업로드
 - 마크다운 단축키 지원
 
-### 컴포넌트 구조
+### 컴포넌트 구조 (home2 - 신규)
 
-- **EditorDialogView** (`view.tsx`): 에디터 최상위 컴포넌트
+- **EditorContainer** (`EditorContainer.tsx`): 에디터 최상위 컨테이너
+    - 라우팅 및 레이아웃 관리
+- **PageEditor** (`PageEditor.tsx`): 에디터 메인 컴포넌트
     - BlockNote 에디터 초기화
     - 제목/본문 상태 관리
-    - 자동저장/자동 제목 트리거
-- **useEditorOperations** (`hooks/useEditorOperations.ts`): 에디터 핵심 로직
-    - 저장, 제목 생성, 수정 감지
+- **useEditorState** (`hooks/useEditorState.ts`): 에디터 상태 관리 훅
+    - 수정 감지, 상태 동기화
 - **useAutoSave** (`hooks/useAutoSave.ts`): 자동저장 전용 훅
     - Debounce 처리
     - 재시도 메커니즘
@@ -252,17 +253,23 @@ const translations = useMemo(
 
 ## 관련 파일
 
-### 에디터 컴포넌트
+### 에디터 컴포넌트 (home2 - 신규)
 
-- **메인 뷰**: `src/components/home/logined/page/CreateUpdate/view.tsx`
-- **에디터 UI**: `src/components/home/logined/page/CreateUpdate/components/EditorUI.tsx`
+- **컨테이너**: `src/components/home2/editor/EditorContainer.tsx`
+- **페이지 에디터**: `src/components/home2/editor/PageEditor.tsx`
+- **컨트롤**: `src/components/home2/editor/components/EditorControls.tsx`
+
+### 에디터 훅 (home2 - 신규)
+
+- **자동저장**: `src/components/home2/editor/hooks/useAutoSave.ts`
+- **에디터 상태**: `src/components/home2/editor/hooks/useEditorState.ts`
+- **페이지 저장**: `src/components/home2/editor/hooks/usePageSave.ts`
+- **키보드 단축키**: `src/components/home2/editor/hooks/useKeyboardShortcuts.ts`
+
+### 레거시 에디터 (home - 마이그레이션 중)
+
+- **메인 로직**: `src/components/home/logined/page/CreateUpdate/useCreate.tsx`
 - **헤더 영역**: `src/components/home/logined/page/CreateUpdate/components/HeaderArea.tsx`
-
-### 에디터 훅
-
-- **자동저장**: `src/components/home/logined/page/CreateUpdate/hooks/useAutoSave.ts`
-- **에디터 작업**: `src/components/home/logined/page/CreateUpdate/hooks/useEditorOperations.ts`
-- **키보드 단축키**: `src/components/home/logined/page/CreateUpdate/hooks/useKeyboardShortcuts.ts`
 
 ### BlockNote 관련
 
@@ -298,4 +305,4 @@ localStorage.debug = 'editor';
 
 ## 관련 문서
 
-- [임베딩 생성](../feature-chat/embeddings.md): 페이지 저장 시 임베딩 생성 프로세스 (별도)
+- [AI 채팅 RAG 모드](../feature-chat/rag-modes.md): 저장된 페이지의 임베딩이 AI 채팅 검색에 활용되는 방식

@@ -258,21 +258,21 @@ UPLOADCARE_PRIVATE_KEY=<your-private-key>
 
 ### 전체 환경 변수 목록
 
-| 변수명                                 | 필수             | 설명                                             |
-| -------------------------------------- | ---------------- | ------------------------------------------------ |
-| `NEXT_PUBLIC_SUPABASE_URL`             | O                | Supabase 프로젝트 URL                            |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY`        | O                | Supabase 공개 키                                 |
-| `SUPABASE_SERVICE_ROLE_KEY`            | O                | Supabase 서비스 역할 키 (서버 전용)              |
-| `NEXT_PUBLIC_HOST`                     | O                | 배포된 앱의 URL                                  |
-| `NEXT_PUBLIC_SOCIAL_LOGIN_REDIRECT_TO` | O                | 소셜 로그인 후 리디렉션 URL                      |
-| `ENABLE_AI`                            | -                | AI 기능 활성화 (`true`/`false`, 기본값: `false`) |
-| `OPENAI_API_KEY`                       | AI 사용 시 (개발) | OpenAI API 키 (프로덕션은 Gateway 사용)         |
-| `NEXT_PUBLIC_ENABLE_SENTRY`            | -                | Sentry 활성화 (`true`/`false`, 기본값: `false`)  |
-| `NEXT_PUBLIC_SENTRY_DSN`               | Sentry 사용 시   | Sentry DSN                                       |
-| `SENTRY_AUTH_TOKEN`                    | Sentry 사용 시   | Sentry 인증 토큰                                 |
-| `NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY`    | 이미지 업로드 시 | Uploadcare 공개 키                               |
-| `UPLOADCARE_PRIVATE_KEY`               | 이미지 삭제 시   | Uploadcare 비공개 키                             |
-| `NEXT_PUBLIC_PWA_DISABLED`             | -                | PWA 비활성화 (`true`/`false`, 기본값: `true`)    |
+| 변수명                                 | 필수              | 설명                                             |
+| -------------------------------------- | ----------------- | ------------------------------------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL`             | O                 | Supabase 프로젝트 URL                            |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`        | O                 | Supabase 공개 키                                 |
+| `SUPABASE_SERVICE_ROLE_KEY`            | O                 | Supabase 서비스 역할 키 (서버 전용)              |
+| `NEXT_PUBLIC_HOST`                     | O                 | 배포된 앱의 URL                                  |
+| `NEXT_PUBLIC_SOCIAL_LOGIN_REDIRECT_TO` | O                 | 소셜 로그인 후 리디렉션 URL                      |
+| `ENABLE_AI`                            | -                 | AI 기능 활성화 (`true`/`false`, 기본값: `false`) |
+| `OPENAI_API_KEY`                       | AI 사용 시 (개발) | OpenAI API 키 (프로덕션은 Gateway 사용)          |
+| `NEXT_PUBLIC_ENABLE_SENTRY`            | -                 | Sentry 활성화 (`true`/`false`, 기본값: `false`)  |
+| `NEXT_PUBLIC_SENTRY_DSN`               | Sentry 사용 시    | Sentry DSN                                       |
+| `SENTRY_AUTH_TOKEN`                    | Sentry 사용 시    | Sentry 인증 토큰                                 |
+| `NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY`    | 이미지 업로드 시  | Uploadcare 공개 키                               |
+| `UPLOADCARE_PRIVATE_KEY`               | 이미지 삭제 시    | Uploadcare 비공개 키                             |
+| `NEXT_PUBLIC_PWA_DISABLED`             | -                 | PWA 비활성화 (`true`/`false`, 기본값: `true`)    |
 
 ### 환경별 설정 권장 사항
 
