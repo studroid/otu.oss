@@ -312,12 +312,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_SENTRY_DSN=
 SENTRY_AUTH_TOKEN=              # Sentry CLI 에러 조회용
-CRON_SECRET=
 
 # AI 설정 (선택)
 ENABLE_AI=false                 # AI 기능 활성화 여부 (true: 활성화, false: 비활성화, 기본값 false)
 OPENAI_API_KEY=                 # ENABLE_AI=true일 때 필요 (개발 환경)
-COHERE_API_KEY=                 # ENABLE_AI=true일 때 필요 (임베딩/RAG 기능)
+# 프로덕션에서는 Vercel AI Gateway를 통해 AI 및 임베딩 기능이 제공됩니다.
 
 # Sentry 설정
 NEXT_PUBLIC_ENABLE_SENTRY=false # Sentry 활성화 여부 (true: 활성화, false: 비활성화, 기본값 false)
@@ -330,7 +329,6 @@ NEXT_PUBLIC_ENABLE_SENTRY=false # Sentry 활성화 여부 (true: 활성화, fals
 
 - AI 사용량 추적 및 할당량 관리
 - 모든 UI 텍스트는 다국어 처리
-- PWA 비활성화: `NEXT_PUBLIC_PWA_DISABLED=true`
 
 ## 아키텍처 특징
 
