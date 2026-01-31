@@ -1,14 +1,11 @@
 export const maxDuration = 300;
 import { createEmbeddingUsingCohere } from '@/functions/ai';
-import { reportErrorToSentry } from '@/functions/error';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { Document } from 'langchain/document';
 const { convert } = require('html-to-text');
 import pMap from 'p-map';
 import { embeddingLogger } from '@/debug/embedding';
-import { addBreadcrumb, captureCheckIn, captureMessage, flush } from '@sentry/nextjs';
 import { createClient } from '@/supabase/utils/server';
-import { createSuperClient } from '@/supabase/utils/super';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/lib/database/types';
 import {
@@ -16,16 +13,23 @@ import {
     parseLocaleFromAcceptLanguage,
 } from '@/functions/constants';
 import { getTranslations } from 'next-intl/server';
-import { cronLogger } from '@/debug/cron';
 import { canUseEmbeddings, getEmbeddingsDisabledReason } from '@/functions/ai/config';
 
+/**
+ * 사용자 트리거 방식의 임베딩 처리 API
+ *
+ * 이 API는 사용자 인증 기반으로 동작하며, Cron 작업에 의존하지 않습니다.
+ * 클라이언트에서 페이지 저장 후 또는 동기화 시점에 직접 호출하여 임베딩을 처리합니다.
+ *
+ * @param user_id - 필수. 처리할 임베딩 작업의 사용자 ID (로그인한 사용자와 일치해야 함)
+ */
 export async function GET(request: Request) {
-    cronLogger('embedding scheduler 시작');
+    embeddingLogger('embedding scheduler 시작 (사용자 트리거 방식)');
 
     // 임베딩 기능 활성화 여부 확인
     if (!canUseEmbeddings()) {
         const reason = getEmbeddingsDisabledReason();
-        cronLogger('Embedding scheduler disabled', { reason });
+        embeddingLogger('Embedding scheduler disabled', { reason });
         return new Response(
             JSON.stringify({
                 message: 'Embedding feature is disabled',
@@ -43,135 +47,61 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const userIdParam = url.searchParams.get('user_id');
 
-    let checkInId;
-    const monitorSlug = 'embedding-scheduler';
-    embeddingLogger('process.env.NODE_ENV', process.env.NODE_ENV);
-    if (!userIdParam && process.env.NODE_ENV === 'production') {
-        checkInId = captureCheckIn(
-            {
-                monitorSlug: monitorSlug,
-                status: 'in_progress',
-            },
-            {
-                schedule: {
-                    type: 'crontab',
-                    value: '* * * * *',
-                },
-                checkinMargin: 5,
-                maxRuntime: 50,
-            }
-        );
-        cronLogger('cron check', {
-            status: 'in_progress',
-            id: checkInId,
-        });
-    }
-
     const locale = parseLocaleFromAcceptLanguage(request.headers.get('accept-language'));
     const t = await getTranslations({ locale });
+
+    // user_id 파라미터는 필수
+    if (!userIdParam) {
+        return new Response(
+            JSON.stringify({
+                message: 'user_id parameter is required',
+                processed: 0,
+            }),
+            {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+    }
 
     embeddingLogger('start');
     const startTime = performance.now();
 
-    let supabase: SupabaseClient<Database>;
-
-    if (userIdParam) {
-        supabase = await createClient();
-        const { data, error } = await supabase.auth.getUser();
-        addBreadcrumb({
-            category: 'embedding',
-            data: {
-                data,
-                error,
-            },
+    const supabase: SupabaseClient<Database> = await createClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    embeddingLogger('breadcrumb:', {
+        category: 'embedding',
+        data: {
+            data: authData,
+            error: authError,
+        },
+    });
+    if (!authData.user) {
+        console.log('인증에 실패했습니다. 이 문제는 무시해도 됩니다.');
+        return new Response(t('api.embedding-scheduler.unauthorized'), {
+            status: 401,
         });
-        if (!data.user) {
-            captureMessage('인증에 실패했습니다. 이 문제는 무시해도 됩니다.');
-            return new Response(t('api.embedding-scheduler.unauthorized'), {
-                status: 401,
-            });
-        }
-        if (userIdParam !== data.user.id) {
-            captureMessage(
-                '인증에 실패했습니다. embedding의 user_id와 현재 로그인한 user_id가 일치하지 않습니다. 이 문제가 급격히 증가했다면 조사하십시오.'
-            );
-            return new Response(t('api.embedding-scheduler.unauthorized'), {
-                status: 401,
-            });
-        }
-    } else {
-        if (process.env.CRON_SECRET === undefined) {
-            embeddingLogger(
-                'CRON_SECRET 가 설정되지 않았습니다. .env.template를 참조해서 .env 파일에 추가해주세요'
-            );
-            throw new Error(t('api.embedding-scheduler.cron-secret-missing'));
-        }
-        const authHeader = request.headers.get('authorization');
-        if (
-            process.env.NODE_ENV !== 'development' &&
-            authHeader !== `Bearer ${process.env.CRON_SECRET}`
-        ) {
-            embeddingLogger(
-                'Unauthorized',
-                authHeader !== `Bearer ${process.env.CRON_SECRET}`,
-                authHeader,
-                `Bearer ${process.env.CRON_SECRET}`
-            );
-            if (checkInId) {
-                const id = captureCheckIn({
-                    checkInId,
-                    monitorSlug,
-                    status: 'error',
-                });
-                cronLogger('cron check', {
-                    status: 'error',
-                    reason: '인증에 실패했습니다 (1)',
-                    id,
-                });
-            }
-            return new Response('Unauthorized', {
-                status: 401,
-            });
-        }
-        supabase = createSuperClient();
+    }
+    if (userIdParam !== authData.user.id) {
+        console.log(
+            '인증에 실패했습니다. embedding의 user_id와 현재 로그인한 user_id가 일치하지 않습니다. 이 문제가 급격히 증가했다면 조사하십시오.'
+        );
+        return new Response(t('api.embedding-scheduler.unauthorized'), {
+            status: 401,
+        });
     }
 
-    let data: any = null;
-    let error: any = null;
+    // 해당 user_id에 속한 모든 PENDING/RUNNING 작업을 즉시 실행
+    embeddingLogger(`Processing jobs for user_id: ${userIdParam}`);
 
-    if (userIdParam) {
-        // user_id가 제공된 경우 해당 user_id에 속한 모든 작업을 즉시 실행
-        embeddingLogger(`Processing jobs for user_id: ${userIdParam}`);
-
-        ({ data, error } = await supabase
-            .from('job_queue')
-            .select('*')
-            .eq('user_id', userIdParam)
-            .in('status', ['PENDING', 'RUNNING'])
-            .order('scheduled_time', { ascending: true }));
-    } else {
-        // user_id가 제공되지 않은 경우 기존 로직대로 scheduled_time을 기준으로 작업 조회
-        ({ data, error } = await supabase
-            .from('job_queue')
-            .select('*')
-            .lt('scheduled_time', new Date().toISOString())
-            .in('status', ['PENDING', 'RUNNING'])
-            .order('scheduled_time', { ascending: true }));
-    }
+    const { data, error } = await supabase
+        .from('job_queue')
+        .select('*')
+        .eq('user_id', userIdParam)
+        .in('status', ['PENDING', 'RUNNING'])
+        .order('scheduled_time', { ascending: true });
 
     if (error) {
-        if (checkInId) {
-            const id = captureCheckIn({
-                checkInId,
-                monitorSlug,
-                status: 'error',
-            });
-            cronLogger('cron check', {
-                status: 'error',
-                reason: '인증에 실패했습니다 (2)',
-                id,
-            });
-        }
         throw new Error(error.message);
     }
 
@@ -192,28 +122,13 @@ export async function GET(request: Request) {
     await pMap(
         data,
         async (job: Job) => {
-            // user_id가 제공된 경우 scheduled_time을 업데이트하지 않고 즉시 실행
-            if (!userIdParam) {
-                const scheduledTime = new Date();
-                scheduledTime.setMinutes(
-                    scheduledTime.getMinutes() + 30 + Math.floor(Math.random() * 30)
-                );
-                const params = {
-                    status: 'RUNNING' as 'RUNNING',
-                    last_running_at: new Date().toISOString(),
-                    scheduled_time: scheduledTime.toISOString(),
-                };
-                embeddingLogger('RUNNING', 'params:', params);
-                await supabase.from('job_queue').update(params).eq('id', job.id);
-            } else {
-                // user_id가 제공된 경우 상태만 RUNNING으로 업데이트
-                const params = {
-                    status: 'RUNNING' as 'RUNNING',
-                    last_running_at: new Date().toISOString(),
-                };
-                embeddingLogger('RUNNING (Immediate)', 'params:', params);
-                await supabase.from('job_queue').update(params).eq('id', job.id);
-            }
+            // 상태를 RUNNING으로 업데이트
+            const params = {
+                status: 'RUNNING' as 'RUNNING',
+                last_running_at: new Date().toISOString(),
+            };
+            embeddingLogger('RUNNING (Immediate)', 'params:', params);
+            await supabase.from('job_queue').update(params).eq('id', job.id);
 
             if (job.job_name === 'EMBEDDING') {
                 embeddingLogger('processDocument', job.payload, job.user_id);
@@ -232,22 +147,14 @@ export async function GET(request: Request) {
                         return;
                     }
                 }
-                let deleteJobError;
-                if (userIdParam) {
-                    const result = await supabase
-                        .from('job_queue')
-                        .delete()
-                        .eq('id', job.id)
-                        .eq('user_id', userIdParam);
-                    deleteJobError = result.error;
-                } else {
-                    const result = await supabase.from('job_queue').delete().eq('id', job.id);
-                    deleteJobError = result.error;
-                }
-                if (deleteJobError) {
-                    embeddingLogger(`Error deleting job ${job.id}: ${deleteJobError.message}`);
-                    captureMessage(`Error deleting job ${job.id}: ${deleteJobError.message}`);
-                    // Optionally, handle errors more gracefully here
+                const result = await supabase
+                    .from('job_queue')
+                    .delete()
+                    .eq('id', job.id)
+                    .eq('user_id', userIdParam);
+                if (result.error) {
+                    embeddingLogger(`Error deleting job ${job.id}: ${result.error.message}`);
+                    console.log(`Error deleting job ${job.id}: ${result.error.message}`);
                 }
             }
         },
@@ -266,18 +173,6 @@ export async function GET(request: Request) {
         (performance.now() - startTime) / 1000 / data.length,
         'job/s'
     );
-    if (checkInId) {
-        const id = captureCheckIn({
-            checkInId,
-            monitorSlug,
-            status: 'ok',
-        });
-        cronLogger('cron check', {
-            status: 'ok',
-            id,
-        });
-    }
-    await flush(2000);
     return new Response(JSON.stringify({ result: data }), {
         headers: { 'Content-Type': 'application/json' },
     });
