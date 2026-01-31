@@ -79,7 +79,6 @@ app/
 │   ├── sync/          # 데이터 동기화
 │   ├── usage/         # 사용량 추적
 │   ├── reminder/      # 알람 관리
-│   ├── sentry/        # Sentry 에러 모니터링
 │   ├── share/         # 페이지 공유
 │   ├── setting/       # 설정 관리
 │   └── check/         # 인증 체크
@@ -186,15 +185,10 @@ function ComponentName(): JSX.Element {
 ### 에러 핸들링
 
 ```typescript
-import { captureException } from '@sentry/nextjs';
-
 try {
     await someAsyncOperation();
 } catch (error) {
-    captureException(error, {
-        level: 'error',
-        tags: { type: 'api' },
-    });
+    console.error('Operation error:', error);
 }
 ```
 
