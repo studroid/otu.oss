@@ -66,7 +66,7 @@ export function Conversation({ onLeaveBottom }: { onLeaveBottom: (isLeave: boole
     useEffect(() => {
         const _noticeText = t`#을 누르면 검색 결과에 대해서 질문할 수 있습니다.` + '<br />';
         setNotice(_noticeText);
-    });
+    }, [t]);
 
     return (
         <>
