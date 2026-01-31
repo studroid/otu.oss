@@ -204,17 +204,6 @@ function Content() {
                 </Accordion>
                 <Accordion sx={accordionStyle}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon sx={iconStyle} />}>
-                        <div className="text-[19px] text-color">{t`가격정책`}</div>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Pa>{t`메모 작성은 무료입니다.`}</Pa>
-                        <Pa>{t`매달 AI, OCR, 파일업로드 기능을 사용할 수 있는 무료 크래딧이 제공됩니다.`}</Pa>
-                        <Pa>{t`유료 구독을 하면 매월 갱신되는 충분한 양의 크래딧을 제공합니다.`}</Pa>
-                        <Pa>{t`정확한 가격은 곧 공지 할 예정입니다.`}</Pa>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion sx={accordionStyle}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon sx={iconStyle} />}>
                         <div className="text-[19px] text-color">{t`OTU 소개`}</div>
                     </AccordionSummary>
                     <AccordionDetails>

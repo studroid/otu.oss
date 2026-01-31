@@ -346,13 +346,8 @@ msgstr ""
 #. next-intl key: editor.close
 #. next-intl key: login.close
 #. next-intl key: page-search.close
-#. next-intl key: pricing-table.close
 #. next-intl key: read.close
 #. next-intl key: setting.close
-#. next-intl key: subscription.billing-history.close
-#. next-intl key: subscription.close
-#. next-intl key: subscription.install-app.close
-#. next-intl key: subscription.payment-issue.close
 msgid "닫기"
 msgstr "Close"
 
@@ -1572,26 +1567,6 @@ msgstr "What others can do, I can do too<br></br>What I can do, others can do to
 msgid "Login"
 msgstr "Login"
 
-#. next-intl key: home.pricing.free-credits
-msgid "매달 AI, OCR, 파일업로드 기능을 사용할 수 있는 무료 크래딧이 제공됩니다."
-msgstr "Free credits are provided monthly for AI, OCR, and file upload features."
-
-#. next-intl key: home.pricing.free-note
-msgid "메모 작성은 무료입니다."
-msgstr "Note-taking is free."
-
-#. next-intl key: home.pricing.paid-credits
-msgid "유료 구독을 하면 매월 갱신되는 충분한 양의 크래딧을 제공합니다."
-msgstr "Paid subscriptions provide ample monthly renewable credits."
-
-#. next-intl key: home.pricing.price-notice
-msgid "정확한 가격은 곧 공지 할 예정입니다."
-msgstr "Exact pricing will be announced at official launch. (Expected $5)"
-
-#. next-intl key: home.pricing.title
-msgid "가격정책"
-msgstr "Pricing"
-
 #. next-intl key: images-are-only-visible-online
 #. next-intl key: read.images-online-only
 msgid "이미지는 온라인에서만 보여집니다."
@@ -1887,97 +1862,21 @@ msgstr "Publish"
 msgid "발행됨"
 msgstr "Published"
 
-#. next-intl key: pricing-table.features.ai-functions
 #. next-intl key: read.features.ai-functions
 msgid "AI 기능"
 msgstr "AI Functions"
 
-#. next-intl key: pricing-table.features.image-upload
 #. next-intl key: read.features.image-upload
 msgid "이미지 업로드"
 msgstr "Image Upload"
 
-#. next-intl key: pricing-table.features.memo
 #. next-intl key: read.features.memo
 msgid "메모"
 msgstr "Memo"
 
-#. next-intl key: pricing-table.features.price
 #. next-intl key: read.features.price
 msgid "가격"
 msgstr "Price"
-
-#. next-intl key: pricing-table.tiers.basic.features
-msgid "[\"무제한 텍스트 메모\",\"제한된 AI 기능(채팅/검색/자동제목/편집)\",\"제한된 이미지 업로드 및 OCR 기능\"]"
-msgstr ""
-"[\"Unlimited text notes\",\"Limited AI features (chat/search/auto title/edit"
-"ing)\",\"Limited image upload and OCR features\"]"
-
-#. next-intl key: pricing-table.tiers.basic.name
-msgid "Basic"
-msgstr "Basic"
-
-#. next-intl key: pricing-table.tiers.basic.price
-msgid "Free"
-msgstr "Free"
-
-#. next-intl key: pricing-table.tiers.plus-annually.features
-#. next-intl key: pricing-table.tiers.plus-weekly.features
-msgid "[\"무제한 텍스트 메모\",\"AI 기능 (채팅, 검색, 자동제목, 편집기)\",\"이미지 업로드 및 OCR 기능\"]"
-msgstr ""
-"[\"Unlimited text notes\",\"AI features (chat, search, auto title, editor)\""
-",\"Image upload and OCR features\"]"
-
-#. next-intl key: pricing-table.tiers.plus-monthly.name
-#. next-intl key: pricing-table.tiers.plus-annually.name
-msgid "Plus"
-msgstr "Plus"
-
-#. next-intl key: pricing-table.tiers.plus-annually.price
-msgid "$50"
-msgstr "$50"
-
-#. next-intl key: pricing-table.tiers.plus-annually.sufixPrice
-msgid "/ year"
-msgstr "/ year"
-
-#. next-intl key: pricing-table.tiers.plus-monthly.features
-msgid "[\"무제한 텍스트 메모\",\"AI 기능 (채팅, 검색, 자동제목, 편집기)\",\"이미지 업로드 및 OCR 기능 \"]"
-msgstr ""
-"[\"Unlimited text notes\",\"AI features (chat, search, auto title, editor)\""
-",\"Image upload and OCR features\"]"
-
-#. next-intl key: pricing-table.tiers.plus-monthly.price
-msgid "$5"
-msgstr "$5"
-
-#. next-intl key: pricing-table.tiers.plus-monthly.sufixPrice
-msgid "/ month"
-msgstr "/ month"
-
-#. next-intl key: pricing-table.tiers.plus-weekly.name
-msgid "주간 플러스"
-msgstr "Plus"
-
-#. next-intl key: pricing-table.tiers.plus-weekly.price
-msgid "$2.5"
-msgstr "$2.5"
-
-#. next-intl key: pricing-table.tiers.plus-weekly.sufixPrice
-msgid "/ week"
-msgstr "/ week"
-
-#. next-intl key: pricing-table.values.credits
-msgid "500 크레딧"
-msgstr "500 Credits"
-
-#. next-intl key: pricing-table.values.monthly-uploads
-msgid "월 100개 업로드"
-msgstr "100 Monthly Uploads"
-
-#. next-intl key: pricing-table.values.sufficient
-msgid "충분한"
-msgstr "Sufficient"
 
 #. next-intl key: profile.nickname
 msgid "닉네임"
@@ -2698,15 +2597,6 @@ msgstr "Store information is missing."
 #. next-intl key: subscription.payment-issue.switch-to-free
 msgid "무료 사용자로 전환"
 msgstr "Switch to Free User"
-
-#. next-intl key: subscription.pricing-header.title
-msgctxt "pricing-header"
-msgid "가격"
-msgstr "Pricing"
-
-#. next-intl key: subscription.pricing-info
-msgid "업그레이드 및 요금안내"
-msgstr "Upgrade and Pricing Information"
 
 #. next-intl key: subscription.privacy
 msgid "개인정보 보호정책"

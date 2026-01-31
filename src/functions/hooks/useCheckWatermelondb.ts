@@ -41,7 +41,7 @@ export default function useCheckWatermelondb() {
                             message: t`디바이스가 앱의 일부 기능을 지원하지 않고 있습니다. 다른 장치를 사용해주세요.`,
                             yesLabel: t`확인`,
                         } as ConfirmOptions);
-                        Sentry.captureMessage('IndexedDB 테스트 DB 삭제 실패');
+                        console.error('[IndexedDB] 테스트 DB 삭제 실패');
                         resolve(false);
                     };
 
@@ -61,7 +61,7 @@ export default function useCheckWatermelondb() {
                     message: t`IndexedDB 테스트 데이터베이스 생성 중 문제가 발생했습니다. 브라우저나 기기 설정을 확인해주세요.`,
                     yesLabel: t`확인`,
                 } as ConfirmOptions);
-                Sentry.captureMessage('IndexedDB 테스트 DB 생성 실패');
+                console.error('[IndexedDB] 테스트 DB 생성 실패');
                 resolve(false);
             };
         });
@@ -73,7 +73,7 @@ export default function useCheckWatermelondb() {
                 message: t`앱 사용을 위해 브라우저 업데이트가 필요합니다. 최신 버전으로 변경해 주시면 모든 기능을 원활하게 이용하실 수 있습니다.`,
                 yesLabel: t`확인`,
             } as ConfirmOptions);
-            Sentry.captureMessage('IndexedDB 테스트 DB 생성에 실패');
+            console.error('[IndexedDB] 브라우저가 IndexedDB를 지원하지 않습니다');
             return false;
         }
 

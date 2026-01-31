@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 import { publishLogger } from '@/debug/publish';
 import { getServerI18n } from '@/lib/lingui';
 import { msg } from '@lingui/core/macro';
+import { parseLocaleFromAcceptLanguage } from '@/functions/constants';
 
 const APP_URL = process.env.NEXT_PUBLIC_HOST || 'https://otu.ai';
 
@@ -77,7 +78,8 @@ export async function generateMetadata(props: {
 
     try {
         // 번역 함수 불러오기
-        const i18n = await getServerI18n('ko');
+        const locale = parseLocaleFromAcceptLanguage((await headers()).get('accept-language'));
+        const i18n = await getServerI18n(locale);
         const data = await fetchPageData(params.id, 'generateMetadata');
 
         // 비공개 또는 존재하지 않는 페이지인 경우
@@ -124,7 +126,8 @@ export async function generateMetadata(props: {
         };
     } catch (error) {
         // 오류 시에도 번역 함수 불러오기
-        const i18n = await getServerI18n('ko');
+        const errorLocale = parseLocaleFromAcceptLanguage((await headers()).get('accept-language'));
+        const i18n = await getServerI18n(errorLocale);
         publishLogger(`[generateMetadata] Error for page ${params.id}`, error);
         console.error('메타데이터 생성 오류:', error);
         return {
@@ -136,7 +139,8 @@ export async function generateMetadata(props: {
 
 export default async function SharePage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const i18n = await getServerI18n('ko');
+    const locale = parseLocaleFromAcceptLanguage((await headers()).get('accept-language'));
+    const i18n = await getServerI18n(locale);
     publishLogger(`[SharePage] Rendering started for page ${params.id}`);
 
     try {

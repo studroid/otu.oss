@@ -1,10 +1,8 @@
 import { useAtom } from 'jotai';
 import { contentListMessageState } from '@/lib/jotai';
-import { useLingui } from '@lingui/react/macro';
 
 export default function ContentListMessage() {
     const [contentListMessage, setContentListMessage] = useAtom(contentListMessageState);
-    const { t } = useLingui();
 
     if (contentListMessage === '') {
         return null;
@@ -36,7 +34,7 @@ export default function ContentListMessage() {
             >
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: t`${contentListMessage}`,
+                        __html: contentListMessage,
                     }}
                 ></div>
             </div>
