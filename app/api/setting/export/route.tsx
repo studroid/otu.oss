@@ -2,13 +2,14 @@
 import errorResponse, { successResponse } from '@/functions/response';
 import { createClient } from '@/supabase/utils/server';
 import { cookies } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { parseLocaleFromAcceptLanguage } from '@/functions/constants';
 // export const runtime = "edge";
 
 export async function GET(req: Request) {
     const locale = parseLocaleFromAcceptLanguage(req.headers.get('accept-language'));
-    const t = await getTranslations({ locale });
+    const i18n = await getServerI18n(locale);
     const supabase = await createClient();
 
     const {
@@ -22,7 +23,7 @@ export async function GET(req: Request) {
                 errorCode: 'NO_USER_INFO',
                 data: {},
                 meta: {},
-                message: t('api.export.login-required'),
+                message: i18n._(msg`로그인이 필요합니다. 사용자 정보를 찾지 못했습니다.`),
             },
             new Error()
         );
@@ -44,7 +45,7 @@ export async function GET(req: Request) {
                 errorCode: 'DATABASE_ERROR',
                 data: {},
                 meta: {},
-                message: t('api.export.fetch-failed'),
+                message: i18n._(msg`데이터를 가져오는 중 오류가 발생했습니다.`),
             },
             error
         );

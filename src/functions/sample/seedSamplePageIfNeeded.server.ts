@@ -3,7 +3,8 @@ import { createHash } from 'crypto';
 import { ulid } from 'ulid';
 import { getUserLocale } from '@/i18n-server';
 import { sampleLogger } from '@/debug/sample';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 
 /**
  * 신규 사용자에게 샘플 페이지를 1회 생성합니다.
@@ -27,10 +28,12 @@ export async function seedSamplePageIfNeeded(
         const locale = await getUserLocale();
         sampleLogger('사용자 로케일 확인', { locale });
 
-        // 2. 로케일에 맞는 샘플 콘텐츠 로드 (raw 함수로 ICU 파싱 우회)
-        const t = await getTranslations({ locale, namespace: 'sample' });
-        const title = t.raw('title') as string;
-        const bodyHtml = t.raw('body') as string;
+        // 2. 로케일에 맞는 샘플 콘텐츠 로드
+        const i18n = await getServerI18n(locale);
+        const title = i18n._(msg`환영합니다! (OTU 샘플 메모)`);
+        const bodyHtml = i18n._(
+            msg`<p>이 페이지는 OTU의 샘플 메모예요. 확인 후 필요 없으면 삭제하셔도 됩니다.</p><p>&nbsp;</p><h3>OTU를 소개합니다.</h3><blockquote><p>"앱의 이름은 OTU입니다. 노트 앱입니다. OpenTUtorials의 줄임말입니다. 일기부터 원고까지, 무엇이든 자유롭게 담을 수 있는 간단한 메모장입니다."</p></blockquote><p>&nbsp;</p><p>저희가 이 노트에 담기기를 은근히 기대하는 주제는 '지식'입니다.</p><ul><li><p>지금은 공부할 시간이 없지만, 언젠가 내 것으로 만들고 싶은 지식.</p></li><li><p>당장은 필요 없지만 언젠가 다시 꺼내야 할 지식.</p></li></ul><p>&nbsp;</p><p>그런 것들을 OTU에 툭 던져 놓으면, 알아서 정리하고 보관해드립니다.</p><p>&nbsp;</p><ul><li><p>비슷한 글이 있다면 연결해드립니다.</p></li><li><p>기억하고 싶은 내용은 리마인드해드립니다.</p></li><li><p>제목이 없다면 대신 지어드립니다.</p></li><li><p>사진이라면, 사진 속 정보를 분석해 설명해드립니다.</p></li><li><p>채팅으로 물어보면, 내 기록을 바탕으로 답하고 찾아드립니다.</p></li></ul><p>&nbsp;</p><p style="text-align: center;"><img src="https://ucarecdn.com/c6aa5cb1-cbb9-4a43-ba4c-b090ed23459d/-/preview/564x1200/" alt="" width="427"></p><p>&nbsp;</p><h3>OTU 사용법</h3><p>&nbsp;</p><p>→ <a href="https://github.com/opentutorials-org/otu.ai" target="_blank" rel="noopener noreferrer">OTU GitHub Repository</a></p><p>&nbsp;</p><p>앱 이용 중 문의사항이나 궁금한 점이 있으시면, <a href="https://github.com/opentutorials-org/otu.ai/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>에 남겨주세요.</p><p>&nbsp;</p><h3>앱 다운로드</h3><p>&nbsp;</p><p>→ <a href="https://apps.apple.com/kr/app/otu-ai/id6473810282" target="_blank" rel="noopener noreferrer">iOS - App Store</a></p><p>→ <a href="https://play.google.com/store/apps/details?id=ai.otu.app" target="_blank" rel="noopener noreferrer">안드로이드 - Google play</a></p><p>&nbsp;</p><h3>오픈튜토리얼스</h3><blockquote><p>"비영리 단체 오픈튜토리얼스는 '내가 할 수 있는 일을 남도 할 수 있게, 남이 할 수 있는 일을 나도 할 수 있게'라는 슬로건을 가진 교육 단체입니다. 기술로 사람을 더 똑똑하게 만드는 방법을 연구합니다."</p></blockquote>`
+        );
 
         // data-block-id 추가
         const body = addBlockIds(bodyHtml);

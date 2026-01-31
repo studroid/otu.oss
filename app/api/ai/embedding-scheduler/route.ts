@@ -12,7 +12,8 @@ import {
     RAG_SEARCH_MIN_LENGTH_THRESHOLD,
     parseLocaleFromAcceptLanguage,
 } from '@/functions/constants';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { canUseEmbeddings, getEmbeddingsDisabledReason } from '@/functions/ai/config';
 
 /**
@@ -48,7 +49,7 @@ export async function GET(request: Request) {
     const userIdParam = url.searchParams.get('user_id');
 
     const locale = parseLocaleFromAcceptLanguage(request.headers.get('accept-language'));
-    const t = await getTranslations({ locale });
+    const i18n = await getServerI18n(locale);
 
     // user_id 파라미터는 필수
     if (!userIdParam) {
@@ -78,7 +79,7 @@ export async function GET(request: Request) {
     });
     if (!authData.user) {
         console.log('인증에 실패했습니다. 이 문제는 무시해도 됩니다.');
-        return new Response(t('api.embedding-scheduler.unauthorized'), {
+        return new Response(i18n._(msg`인증에 실패했습니다.`), {
             status: 401,
         });
     }
@@ -86,7 +87,7 @@ export async function GET(request: Request) {
         console.log(
             '인증에 실패했습니다. embedding의 user_id와 현재 로그인한 user_id가 일치하지 않습니다. 이 문제가 급격히 증가했다면 조사하십시오.'
         );
-        return new Response(t('api.embedding-scheduler.unauthorized'), {
+        return new Response(i18n._(msg`인증에 실패했습니다.`), {
             status: 401,
         });
     }

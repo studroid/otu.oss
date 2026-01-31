@@ -1,7 +1,8 @@
 import { TEXT_MODEL_NAME, parseLocaleFromAcceptLanguage } from '@/functions/constants';
 import errorResponse, { successResponse } from '@/functions/response';
 import { createClient } from '@/supabase/utils/server';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { aiLogger } from '@/debug/ai';
 import { generateObject } from 'ai';
 import { gateway } from '@ai-sdk/gateway';
@@ -23,7 +24,7 @@ const titleGenerationSchema = z.object({
 
 export async function POST(req: Request) {
     const locale = parseLocaleFromAcceptLanguage(req.headers.get('accept-language'));
-    const t = await getTranslations({ locale });
+    const i18n = await getServerI18n(locale);
 
     // AI 기능 활성화 여부 확인
     if (!canUseAI()) {
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
         aiLogger('AI titling disabled', { reason });
         return successResponse({
             status: 200,
-            message: t('api.ai.titling.disabled'),
+            message: i18n._(msg`AI 제목 생성 기능이 비활성화되어 있습니다.`),
             data: { createdTitle: '' },
         });
     }
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const contentBody = body.body;
 
-    const userResponse = await authenticateUser(t);
+    const userResponse = await authenticateUser(i18n);
     if ('error' in userResponse) return userResponse.error;
 
     try {
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
 
         return successResponse({
             status: 200,
-            message: t('api.ai.search.success'),
+            message: i18n._(msg`성공적으로 처리했습니다.`),
             data: { createdTitle: content },
         });
     } catch (e: any) {
@@ -57,26 +58,36 @@ export async function POST(req: Request) {
                 {
                     status: 429,
                     errorCode: 'EXTERNAL_SERVICE_RATE_LIMIT',
-                    message: t('api.errors.external-rate-limit'),
+                    message: i18n._(
+                        msg`일시적으로 요청이 많아 처리할 수 없습니다. 잠시 후 다시 시도해주세요.`
+                    ),
                 },
                 e
             );
         }
         return errorResponse(
-            { status: 500, errorCode: 'FAIL_TITLING', message: t('api.ai.titling.failed') },
+            {
+                status: 500,
+                errorCode: 'FAIL_TITLING',
+                message: i18n._(msg`AI가 제목을 짓지 못했습니다.`),
+            },
             e
         );
     }
 }
 
-async function authenticateUser(t: any) {
+async function authenticateUser(i18n: any) {
     const supabase = await createClient();
     const user = await supabase.auth.getUser();
 
     if (user.data.user === null) {
         return {
             error: errorResponse(
-                { status: 500, errorCode: 'NEED_LOGIN', message: t('api.ai.titling.failed') },
+                {
+                    status: 500,
+                    errorCode: 'NEED_LOGIN',
+                    message: i18n._(msg`AI가 제목을 짓지 못했습니다.`),
+                },
                 new Error(
                     'AI 제목을 짓기 위해서는 로그인이 필요합니다. 이 문제는 로그인이 되어 있지 않아서 발생했습니다.'
                 )

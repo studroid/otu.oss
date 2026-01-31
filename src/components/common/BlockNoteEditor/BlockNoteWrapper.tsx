@@ -144,7 +144,7 @@ export const BlockNoteWrapper: React.FC<BlockNoteProps> = ({
     const isUnmountingRef = useRef(false);
     const openSnackbar = useSetAtom(openSnackbarState);
     const setEditorContext = useSetAtom(editorUploaderContextState);
-    const { t: tEditor } = useLingui();
+    const { t } = useLingui();
     const { isUploading, handleDrop, handlePaste } = useImageDrop({ editor, pageId });
 
     // AI 기능 활성화 여부를 메모이제이션하여 성능 최적화
@@ -363,13 +363,13 @@ export const BlockNoteWrapper: React.FC<BlockNoteProps> = ({
     useEffect(() => {
         if (isUploading) {
             openSnackbar({
-                message: tEditor`파일 업로드 중...`,
+                message: t`파일 업로드 중...`,
                 autoHideDuration: null,
                 horizontal: 'left',
                 vertical: 'bottom',
             });
         }
-    }, [isUploading, tEditor, openSnackbar]);
+    }, [isUploading, t, openSnackbar]);
 
     return (
         <div
@@ -403,9 +403,9 @@ export const BlockNoteWrapper: React.FC<BlockNoteProps> = ({
                             const customItems = getCustomSlashMenuItems(
                                 editor,
                                 {
-                                    mediaGroupTitle: tEditor`미디어`,
-                                    mediaSlashMenuTitle: tEditor`미디어 & 파일`,
-                                    mediaDescription: tEditor`이미지, 동영상, PDF 및 기타 파일 업로드`,
+                                    mediaGroupTitle: t`미디어`,
+                                    mediaSlashMenuTitle: t`미디어 & 파일`,
+                                    mediaDescription: t`이미지, 동영상, PDF 및 기타 파일 업로드`,
                                 },
                                 pageId
                             );

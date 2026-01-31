@@ -6,7 +6,8 @@ import {
     defaultLocale,
 } from '@/functions/constants';
 import { createClient } from '@/supabase/utils/server';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { canUseAI, getAIDisabledReason } from '@/functions/ai/config';
 
 export const runtime = 'nodejs';
@@ -181,8 +182,10 @@ export async function POST(req: Request) {
 
         // 다국어 번역 가져오기
         captionLogger('다국어 번역 조회 시작', { locale });
-        const t = await getTranslations({ locale, namespace: 'setting.custom-prompt' });
-        const defaultPicturePrompt = t('default-picture-prompt');
+        const i18n = await getServerI18n(locale);
+        const defaultPicturePrompt = i18n._(
+            msg`이미지의 초점이 문자라면 문자만 출력해주세요. 그렇지 않다면, 보이는 사물을 단어로 나열해주세요. 설명형 문장 사용 금지. 예: 컵, 꽃, 바다, 갈매기`
+        );
         captionLogger('기본 프롬프트 조회 완료', { defaultPicturePrompt });
 
         // 사용자의 커스텀 프롬프트 확인

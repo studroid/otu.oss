@@ -4,9 +4,6 @@ import { NextRequest } from 'next/server';
 import { streamText, CoreMessage } from 'ai';
 import { gateway } from '@ai-sdk/gateway';
 import { createOpenAI } from '@ai-sdk/openai';
-import { createTranslator } from 'next-intl';
-import messages from '@/messages/ko.json';
-
 import errorResponse from '@/functions/response';
 import { generatePrompt, generateInstructions } from '@/functions/ai/vercel/prompt';
 import { extractContextMessages } from '@/functions/ai/vercel/extractContextMessages';
@@ -15,7 +12,8 @@ import { responseByStream } from '@/functions/ai/vercel/responseByStream';
 import { askLLMRequestType } from '@/functions/ai/vercel/type';
 import { aiLogger } from '@/debug/ai';
 import { TEXT_MODEL_NAME } from '@/functions/constants';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { logHeader } from '@/functions/logHeader';
 import { parseLocaleFromAcceptLanguage } from '@/functions/constants';
 import { canUseAI, getAIDisabledReason } from '@/functions/ai/config';
@@ -27,13 +25,13 @@ export async function POST(req: NextRequest) {
     const startTime = Date.now();
     aiLogger(`Request received`);
     const locale = parseLocaleFromAcceptLanguage(req.headers.get('accept-language'));
-    const t = await getTranslations({ locale });
+    const i18n = await getServerI18n(locale);
     logHeader(req);
     const supabase = await createClient();
     const user = await supabase.auth.getUser();
     aiLogger(`getUser completed: ${Date.now() - startTime}ms`);
     if (user.data.user === null) {
-        return responseByStream(t('api.errors.login-required'));
+        return responseByStream(i18n._(msg`채팅 기능을 사용하기 위해서는 로그인이 필요합니다.`));
     }
 
     const body: askLLMRequestType = await req.json();
@@ -46,14 +44,14 @@ export async function POST(req: NextRequest) {
     if (!canUseAI()) {
         const reason = getAIDisabledReason();
         aiLogger(`AI disabled: ${reason}`);
-        return responseByStream(t('api.errors.ai-not-configured'));
+        return responseByStream(i18n._(msg`AI 기능이 설정되지 않았습니다. 관리자에게 문의하세요.`));
     }
 
     if (TEXT_MODEL_NAME === undefined) {
         return errorResponse(
             {
                 errorCode: 'INVALID_MODEL',
-                message: t('api.errors.model-invalid'),
+                message: i18n._(msg`모델 정보가 잘못되었습니다.`),
             },
             new Error('INVALID_MODEL')
         );
@@ -109,7 +107,9 @@ export async function POST(req: NextRequest) {
                     errorCode: 'EXTERNAL_SERVICE_RATE_LIMIT',
                     data: {},
                     meta: {},
-                    message: t('api.errors.external-rate-limit'),
+                    message: i18n._(
+                        msg`일시적으로 요청이 많아 처리할 수 없습니다. 잠시 후 다시 시도해주세요.`
+                    ),
                 },
                 e
             );
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
                 errorCode: 'FAIL_OPENAI_CHAT_COMPLETIONS_CREATE',
                 data: {},
                 meta: {},
-                message: t('api.errors.ai-request-failed'),
+                message: i18n._(msg`AI 요청 중 오류가 발생했습니다. 잠시 후 다시 시도해보세요.`),
             },
             e
         );

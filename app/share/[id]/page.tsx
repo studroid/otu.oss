@@ -5,7 +5,8 @@ import SharePageContent from './SharePageContent';
 import './style.css';
 import { headers } from 'next/headers';
 import { publishLogger } from '@/debug/publish';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 
 const APP_URL = process.env.NEXT_PUBLIC_HOST || 'https://otu.ai';
 
@@ -76,14 +77,21 @@ export async function generateMetadata(props: {
 
     try {
         // 번역 함수 불러오기
-        const t = await getTranslations('SharePage');
+        const i18n = await getServerI18n('ko');
         const data = await fetchPageData(params.id, 'generateMetadata');
 
         // 비공개 또는 존재하지 않는 페이지인 경우
         if (data.isError) {
             return {
-                title: data.status === 403 ? t('error.private') : t('error.title'),
-                description: data.message || t('error.description'),
+                title:
+                    data.status === 403
+                        ? i18n._(msg`비공개 페이지`)
+                        : i18n._(msg`존재하지 않는 페이지`),
+                description:
+                    data.message ||
+                    i18n._(
+                        msg`요청하신 페이지를 찾을 수 없습니다. 페이지가 삭제되었거나 비공개 상태일 수 있습니다.`
+                    ),
             };
         }
 
@@ -95,37 +103,40 @@ export async function generateMetadata(props: {
             .slice(0, 150) // 150자로 제한
             .trim();
 
+        const defaultTitle = i18n._(msg`공유된 페이지`);
+        const defaultDescription = i18n._(msg`OTU에서 공유된 페이지입니다.`);
+
         publishLogger(`[generateMetadata] Generated metadata for page ${params.id}`);
         return {
-            title: page.title || t('meta.default-title'),
-            description: description || t('meta.default-description'),
+            title: page.title || defaultTitle,
+            description: description || defaultDescription,
             openGraph: {
-                title: page.title || t('meta.default-title'),
-                description: description || t('meta.default-description'),
+                title: page.title || defaultTitle,
+                description: description || defaultDescription,
                 type: 'article',
                 url: `${APP_URL}/share/${params.id}`,
             },
             twitter: {
                 card: 'summary_large_image',
-                title: page.title || t('meta.default-title'),
-                description: description || t('meta.default-description'),
+                title: page.title || defaultTitle,
+                description: description || defaultDescription,
             },
         };
     } catch (error) {
         // 오류 시에도 번역 함수 불러오기
-        const t = await getTranslations('SharePage');
+        const i18n = await getServerI18n('ko');
         publishLogger(`[generateMetadata] Error for page ${params.id}`, error);
         console.error('메타데이터 생성 오류:', error);
         return {
-            title: t('error.meta-error-title'),
-            description: t('error.meta-error-description'),
+            title: i18n._(msg`오류가 발생했습니다`),
+            description: i18n._(msg`페이지를 불러오는 중 문제가 발생했습니다.`),
         };
     }
 }
 
 export default async function SharePage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const t = await getTranslations('SharePage');
+    const i18n = await getServerI18n('ko');
     publishLogger(`[SharePage] Rendering started for page ${params.id}`);
 
     try {
@@ -137,15 +148,21 @@ export default async function SharePage(props: { params: Promise<{ id: string }>
             return (
                 <div className="flex flex-col items-center justify-center h-screen">
                     <h1 className="text-2xl font-bold mb-4">
-                        {data.status === 403 ? t('error.private') : t('error.title')}
+                        {data.status === 403
+                            ? i18n._(msg`비공개 페이지`)
+                            : i18n._(msg`존재하지 않는 페이지`)}
                     </h1>
                     <p className="text-gray-600 mb-6">
                         {data.status === 403
-                            ? t('error.private-description')
-                            : t('error.description')}
+                            ? i18n._(
+                                  msg`이 페이지는 작성자가 비공개로 설정한 페이지입니다. 페이지 접근 권한이 필요합니다.`
+                              )
+                            : i18n._(
+                                  msg`요청하신 페이지를 찾을 수 없습니다. 페이지가 삭제되었거나 비공개 상태일 수 있습니다.`
+                              )}
                     </p>
                     <Link href="/" className="text-indigo-600 hover:text-indigo-800">
-                        {t('error.home')}
+                        {i18n._(msg`홈으로 돌아가기`)}
                     </Link>
                 </div>
             );
@@ -170,10 +187,12 @@ export default async function SharePage(props: { params: Promise<{ id: string }>
         console.error('페이지 데이터 가져오기 오류:', error);
         return (
             <div className="flex flex-col items-center justify-center h-screen">
-                <h1 className="text-2xl font-bold mb-4">{t('error.meta-error-title')}</h1>
-                <p className="text-gray-600 mb-6">{t('error.meta-error-description')}</p>
+                <h1 className="text-2xl font-bold mb-4">{i18n._(msg`오류가 발생했습니다`)}</h1>
+                <p className="text-gray-600 mb-6">
+                    {i18n._(msg`페이지를 불러오는 중 문제가 발생했습니다.`)}
+                </p>
                 <Link href="/" className="text-indigo-600 hover:text-indigo-800">
-                    {t('error.home')}
+                    {i18n._(msg`홈으로 돌아가기`)}
                 </Link>
             </div>
         );

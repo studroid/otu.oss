@@ -4,7 +4,8 @@ import errorResponse, { successResponse } from '@/functions/response';
 import { createClient } from '@/supabase/utils/server';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
-import { getTranslations } from 'next-intl/server';
+import { getServerI18n } from '@/lib/lingui';
+import { msg } from '@lingui/core/macro';
 import { parseLocaleFromAcceptLanguage } from '@/functions/constants';
 import { createSuperClient } from '@/supabase/utils/super';
 import { withdrawLogger } from '@/debug/withdraw';
@@ -12,9 +13,7 @@ import { withdrawLogger } from '@/debug/withdraw';
 export async function POST(req: NextRequest) {
     withdrawLogger('=== 탈퇴 프로세스 시작 ===');
     const locale = parseLocaleFromAcceptLanguage(req.headers.get('accept-language'));
-    // 테스트 환경에서는 번역 호출을 우회하여 키 그대로 반환
-    const t: (key: string) => string =
-        process.env.NODE_ENV === 'test' ? (key: string) => key : await getTranslations({ locale });
+    const i18n = await getServerI18n(locale);
     withdrawLogger('언어 설정:', locale);
 
     // 일반 클라이언트로 로그인 사용자 확인 (테스트 환경에서는 SSR 쿠키 접근을 우회)
@@ -42,7 +41,7 @@ export async function POST(req: NextRequest) {
                     errorCode: 'NO_USER_INFO',
                     data: {},
                     meta: {},
-                    message: t('setting.withdraw.login-required'),
+                    message: i18n._(msg`로그인이 필요합니다. 사용자 정보를 찾지 못했습니다.`),
                 },
                 new Error()
             );
@@ -461,7 +460,7 @@ export async function POST(req: NextRequest) {
                 errorCode: 'WITHDRAW_FAILED',
                 data: {},
                 meta: {},
-                message: t('setting.withdraw.failed'),
+                message: i18n._(msg`탈퇴에 실패했습니다. 관리자에게 문의 해주세요.`),
             },
             e
         );
@@ -470,6 +469,6 @@ export async function POST(req: NextRequest) {
     withdrawLogger('=== 탈퇴 프로세스 성공 완료 ===');
     return successResponse({
         status: 200,
-        message: t('setting.withdraw.success'),
+        message: i18n._(msg`성공적으로 처리했습니다. 그 동안 이용해주셔서 감사합니다.`),
     });
 }
