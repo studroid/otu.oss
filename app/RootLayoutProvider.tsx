@@ -5,9 +5,19 @@ import { themeModeState } from '@/lib/jotai';
 import { themeLogger } from '@/debug/theme';
 
 /**
- * 테마 관리 로직:
- * - themeMode localStorage 값이 있으면: 사용자가 선택한 테마 사용, 시스템 테마 무시
- * - themeMode localStorage 값이 없으면: 시스템 테마 따라감
+ * 테마 시스템 (gray/white/black)
+ *
+ * 구조:
+ * - themeModeState (Jotai): 'gray' | 'white' | 'black'
+ * - HTML class: <html class="[themeMode]">
+ * - CSS 변수: globals.css에서 --bg-color, --text-color 등 매핑
+ *
+ * 시스템 테마 자동 감지:
+ * - localStorage에 themeMode 없음: 시스템 테마 실시간 추적 (dark→black, light→gray)
+ * - localStorage에 themeMode 있음: 사용자 선택 유지, 시스템 테마 무시
+ *
+ * 하위 호환: html.light→gray, html.dark→black
+ * MUI: themeMode==='black'일 때만 dark palette 사용
  */
 export const RootLayoutProvider = ({ children }: { children: React.ReactNode }) => {
     const [themeMode, setThemeMode] = useAtom(themeModeState);

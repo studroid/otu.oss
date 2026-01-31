@@ -2,6 +2,21 @@ import { Model } from '@nozbe/watermelondb';
 import { field, text, readonly, date } from '@nozbe/watermelondb/decorators';
 import { shouldUseDecorators } from '@/utils/environment';
 
+/**
+ * 폴더 모델 (WatermelonDB)
+ *
+ * DB 구조:
+ * - id(ULID), user_id(RLS), name, description, thumbnail_url
+ * - page_count: PostgreSQL 트리거로 자동 업데이트
+ * - last_page_added_at: 마지막 페이지 추가 시간
+ *
+ * 오프라인 우선:
+ * - 폴더 작업은 로컬 DB에서 즉시 처리, triggerSync()로 백그라운드 동기화
+ * - 배치 처리: addPagesToFolder()로 다중 페이지 한 번에 처리
+ *
+ * 페이지-폴더 관계:
+ * - Page.folder_id로 연결, 폴더 삭제 시 folder_id를 null로 설정
+ */
 export default class Folder extends Model {
     static table = 'folder';
 

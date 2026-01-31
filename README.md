@@ -2,8 +2,6 @@
 
 > AI 기반 스마트 메모 애플리케이션 - 생각을 기록하고, AI가 기억을 돕습니다
 
-[English](README.en.md)
-
 [![Version](https://img.shields.io/badge/version-0.5.201-blue.svg)](https://github.com/opentutorials-org/otu.oss)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
@@ -47,8 +45,7 @@
 Claude Code, Cursor, Windsurf 등 AI 코딩 에이전트를 사용한다면, 아래 프롬프트를 복사해서 붙여넣으세요:
 
 ```
-다음 설치 가이드를 따라 OTU 프로젝트를 설치하고 설정해줘:
-https://raw.githubusercontent.com/opentutorials-org/otu.oss/main/docs/installation.md
+OTU 프로젝트를 설치하고 설정해줘. README.md의 "빠른 시작" 섹션을 참고해.
 ```
 
 ### 직접 설치하기
@@ -98,7 +95,7 @@ npm run dev
 
 > 💡 **팁**: 개발 환경에서는 `/signin` 경로에서 이메일 로그인을 사용할 수 있습니다.
 
-📖 **상세 설치 가이드**: [docs/installation.md](docs/installation.md) - 환경 변수, 문제 해결 등 자세한 내용
+📖 **상세 설치**: 아래 "시작하기" 섹션 참조 - 환경 변수, 문제 해결 등 자세한 내용
 
 ---
 
@@ -800,47 +797,6 @@ https://github.com/opentutorials-org/otu.ai/issues?q=is%3Aissue+label%3Atraining
 
 더 자세한 정보는 다음 문서들을 참조하세요:
 
-### 핵심 문서
-
 - **CLAUDE.md**: AI 어시스턴트를 위한 프로젝트 가이드 (코딩 스타일 포함)
-- **기능 목록**: `/docs/meta-guides/functionality.md`
-    - 사용자 관리 및 인증
-    - 편집 기능 (BlockNote, AI 통합)
-    - 폴더 시스템 및 검색
-    - 알람/리마인더 시스템
-
-### 메커니즘 문서
-
-`/docs/` 디렉토리 (prefix 기반 분류):
-
-- **[docs/README.md](docs/README.md)** - 📚 전체 문서 목차 및 가이드
-
-**메타 문서 (meta-guides/)**:
-
-- `functionality.md` - 전체 기능 명세
-
-**도메인 시스템 (domain-\*)**:
-
-- `domain-authentication/` - 인증 및 사용자 ID 관리 (2개 문서)
-- `domain-reminders/` - 알람 시스템 (2개 문서)
-
-**기능 (feature-\*)**:
-
-- `feature-editor/` - 에디터 자동저장 및 임베딩 (1개 문서)
-- `feature-chat/` - AI 채팅 RAG 및 임베딩 (2개 문서)
-
-**핵심 메커니즘 (core-\*)**:
-
-- `core-data/` - WatermelonDB 동기화, 샘플 데이터, 폴더 (3개 문서)
-- `core-routing/` - React Router 네비게이션 (2개 문서)
-- `core-ui/` - 테마, z-index, 반응형 레이아웃 (5개 문서)
-- `core-architecture/` - 성능 최적화, HOC 패턴, 공유 (3개 문서)
-
-**테스트 (test/)**:
-
-- `test-status.md` - 전체 테스트 현황
-
-> **참고**: docs/README.md에서 전체 문서 구조와 읽는 순서를 안내합니다.
-
-...........
-............
+- **기능 목록**: `/docs/meta-guides/functionality.md` - 사용자 관리, 편집, 폴더, 알람 등 전체 기능 명세
+- **배포 가이드**: `/docs/deployment.md` - 배포 관련 설정

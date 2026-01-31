@@ -2,6 +2,19 @@ import { useCallback, useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
 import { editorViewLogger } from '@/debug/editor';
 
+/**
+ * 에디터 자동저장 훅
+ *
+ * 저장 트리거: 내용/제목 변경 후 3초 경과 (debounce), 수동 저장
+ * 저장 안함: 연속 편집 중, 이미 저장 중, 수정사항 없음
+ *
+ * Debounce 안정화: useRef로 함수 관리, submitHandlerRef/isModifiedRef로 최신 참조
+ * 재시도: 실패 시 5초 간격 최대 3회, 모두 실패 시 오류 알림
+ *
+ * 자동 제목 생성 (로그인 사용자):
+ * - 본문 100자 이상 + 제목 없음 + 미생성 + 쿨다운 10초 경과
+ * - API: /api/ai/titling
+ */
 export function useAutoSave({
     isModified,
     submitHandler,

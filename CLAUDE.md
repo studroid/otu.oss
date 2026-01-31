@@ -16,6 +16,35 @@
 - **로깅**: `/debug` 디렉토리의 debug.js 라이브러리 사용
 - **다국어**: UI 텍스트는 항상 다국어 처리 확인
 
+### 문서 최적화 원칙
+
+문서는 **간결하고 중복 없이 최소한으로** 유지합니다:
+
+- **문서 수 최소화**: 프로젝트 이해에 충분한 정도만 유지
+- **중복 금지**: 같은 내용이 여러 문서에 존재하면 안 됨
+- **코드 가까이**: 메커니즘 설명은 해당 코드 파일의 JSDoc/주석으로 작성
+- **별도 문서가 필요한 경우**: 여러 파일에 걸친 아키텍처, 외부 배포 가이드, 기능 명세 등
+
+**권장 문서 구조**:
+
+```
+프로젝트/
+├── README.md              # 프로젝트 소개 + 빠른 시작
+├── CLAUDE.md              # AI 코딩 규칙 + 아키텍처 요약
+├── CONTRIBUTING.md        # 기여 가이드 (오픈소스 표준)
+├── CODE_OF_CONDUCT.md     # 행동 강령 (오픈소스 표준)
+├── SECURITY.md            # 보안 정책 (오픈소스 표준)
+└── docs/
+    ├── deployment.md      # 프로덕션 배포 가이드
+    └── functionality.md   # 전체 기능 명세
+```
+
+**문서 작성/수정 시 체크리스트**:
+
+1. 이 내용이 코드 주석으로 대체 가능한가? → 코드에 작성
+2. 다른 문서에 이미 같은 내용이 있는가? → 한 곳으로 통합
+3. 이 문서가 없으면 프로젝트 이해에 문제가 있는가? → 없으면 삭제 고려
+
 ### 절대 금지 작업
 
 - `npx supabase db push` (데이터베이스 푸시)
@@ -299,23 +328,13 @@ OPENAI_API_KEY=                 # ENABLE_AI=true일 때 필요 (개발 환경)
 
 프로젝트에 대한 더 자세한 정보는 다음 문서들을 참고하세요:
 
-### 기능 명세
+- **기능 목록**: `/docs/meta-guides/functionality.md` - 사용자 관리, 편집, 폴더, 알람 등 전체 기능 명세
 
-- **기능 목록**: `/docs/meta-guides/functionality.md`
-    - 사용자 관리 및 인증
-    - 편집 기능 (BlockNote, AI 통합)
-    - 폴더 시스템 및 검색
-    - 알람/리마인더 시스템
+메커니즘 문서들은 해당 코드 파일 상단 주석으로 통합되었습니다:
 
-### 메커니즘 상세
-
-- **메커니즘 문서**: `/docs/` (카테고리 prefix 기반 분류)
-
-    - `meta-guides/functionality.md` - 전체 기능 명세
-    - `domain-reminders/core.md` - 알람 시스템 핵심 구조
-    - `feature-editor/autosave.md` - 에디터 자동저장 및 임베딩
-    - `feature-chat/rag-modes.md` - AI 채팅 RAG 모드 및 참조 문서 필터링
-    - `core-data/sync.md` - WatermelonDB 동기화 메커니즘
-    - `core-data/folders.md` - 폴더 시스템
-    - `core-ui/theme.md` - 테마 시스템 (gray/white/black)
-    - `test/test-status.md` - 테스트 현황
+- 동기화: `src/watermelondb/sync.ts`
+- 폴더: `src/watermelondb/model/Folder.ts`
+- 테마: `app/RootLayoutProvider.tsx`
+- 자동저장: `src/components/home2/Editor/hooks/useAutoSave.ts`
+- RAG 검색: `app/api/ai/similaritySearch/route.tsx`
+- 리마인더: `app/api/reminder/register-by-page/route.ts`

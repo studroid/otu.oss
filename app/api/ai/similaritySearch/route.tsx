@@ -1,3 +1,20 @@
+/**
+ * AI 채팅 RAG (Similarity Search) API
+ *
+ * RAG 모드:
+ * - none: 참조 없이 대화 (가장 빠름)
+ * - all: 전체 페이지에서 벡터 유사도 검색
+ * - current: 현재 페이지만 참조
+ *
+ * 검색 프로세스:
+ * 1. 질문 임베딩 (OpenAI/Vercel AI Gateway)
+ * 2. PostgreSQL match_documents 함수로 Cosine Similarity 계산
+ * 3. 유사도 0.55 이상, 기본 3개 결과 반환
+ *
+ * Current 모드 특수 케이스:
+ * - 페이지 600자 미만: 전체 내용을 참조로 사용
+ * - 검색 결과 없음: 본문 600자 잘라서 참조
+ */
 import { cookies } from 'next/headers';
 import { createEmbedding } from '@/functions/ai';
 import errorResponse, { successResponse } from '@/functions/response';

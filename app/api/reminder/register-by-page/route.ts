@@ -1,3 +1,17 @@
+/**
+ * 리마인더 등록 API
+ *
+ * alarm 테이블 구조:
+ * - page_id(PK), user_id, title, body (최대 2000자)
+ * - next_alarm_time: 다음 알람 시간
+ * - sent_count: 발송 횟수 (지수 백오프 계산용)
+ * - processed_at: 동시성 제어 (6시간 초과 시 자동 복구)
+ *
+ * 동시성 제어: FOR UPDATE SKIP LOCKED로 행 단위 락
+ * 중복 방지: resolve_alarm_time_conflict 함수, idempotency-key
+ *
+ * 디버깅: DEBUG='alarm' 또는 localStorage.debug='alarm'
+ */
 import { createClient } from '@/supabase/utils/server';
 import { NextResponse } from 'next/server';
 import { alarmLogger } from '@/debug/alarm';

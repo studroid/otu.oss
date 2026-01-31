@@ -1,3 +1,18 @@
+/**
+ * WatermelonDB 동기화 모듈
+ *
+ * 오프라인 우선 동기화 시스템:
+ * - Pull(서버→로컬): lastPulledAt 이후 변경사항 조회, 증분 동기화
+ * - Push(로컬→서버): synced=false 레코드 업로드
+ *
+ * 동시성 제어:
+ * - 클라이언트(useSync): isSyncingRef로 중복 요청 즉시 거부, debounce(2000ms)
+ * - 서버(sync.ts): isSyncing 플래그, 진행 중이면 currentSyncPromise 반환
+ *
+ * 자동 트리거: online/focus/visibilitychange 이벤트, 30분 주기, 앱 시작 시
+ *
+ * 디버깅: localStorage.debug='sync' 또는 DEBUG='sync'
+ */
 import { SyncPullArgs, synchronize } from '@nozbe/watermelondb/sync';
 import { database } from './index';
 import { syncLogger } from '@/debug/sync';
