@@ -3,6 +3,7 @@ import errorResponse, { successResponse } from '@/functions/response';
 import { createClient } from '@/supabase/utils/server';
 import { getServerI18n } from '@/lib/lingui';
 import { msg } from '@lingui/core/macro';
+import type { I18n } from '@lingui/core';
 import { aiLogger } from '@/debug/ai';
 import { generateObject } from 'ai';
 import { gateway } from '@ai-sdk/gateway';
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
     }
 }
 
-async function authenticateUser(i18n: any) {
+async function authenticateUser(i18n: I18n) {
     const supabase = await createClient();
     const user = await supabase.auth.getUser();
 
