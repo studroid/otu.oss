@@ -105,19 +105,27 @@ npm run deploy              # 프로덕션 배포
 
 ```
 app/
-├── (ui)/               # UI 페이지 그룹
-│   ├── home/          # 메인 홈 (React Router DOM 사용)
-│   ├── signin/        # 로그인
-│   └── ...            # 기타 UI 페이지들
-├── api/                # API 라우트
-│   ├── ai/            # AI 엔드포인트
-│   ├── sync/          # 데이터 동기화
-│   ├── reminder/      # 알람 관리
-│   ├── share/         # 페이지 공유
-│   ├── setting/       # 설정 관리
-│   └── check/         # 인증/버전 체크
-├── auth/              # 인증 관련
-└── share/             # 페이지 공유 UI
+├── (ui)/                    # UI 페이지 그룹
+│   ├── (welcome)/           # 웰컴 페이지
+│   ├── home/                # 메인 홈 (React Router DOM 사용)
+│   ├── signin/              # 로그인
+│   ├── signup/              # 회원가입
+│   ├── login_callback/      # OAuth 콜백 처리
+│   ├── faq/                 # FAQ 페이지
+│   ├── error/               # 에러 페이지
+│   ├── test/                # 테스트 페이지
+│   └── ~fallback/           # 폴백 라우트
+├── api/                     # API 라우트
+│   ├── ai/                  # AI 엔드포인트
+│   ├── sync/                # 데이터 동기화
+│   ├── reminder/            # 알람 관리
+│   ├── share/               # 페이지 공유
+│   ├── setting/             # 설정 관리 (export, withdraw)
+│   ├── check/               # 인증/버전 체크
+│   ├── refresh_token_check/ # 토큰 갱신 체크
+│   └── test/                # 테스트 엔드포인트
+├── auth/                    # 인증 관련
+└── share/                   # 페이지 공유 UI
 
 src/
 ├── __tests__/         # 프로젝트 레벨 테스트 (통합/크로스 도메인)
@@ -131,7 +139,10 @@ src/
 │   │   └── router/    # React Router 설정
 │   ├── core/          # 핵심 컴포넌트 (Setting, fileUploader 등)
 │   ├── GlobalInput/   # 빠른 메모 입력
-│   └── layout/        # 레이아웃 컴포넌트
+│   ├── layout/        # 레이아웃 컴포넌트
+│   ├── betaTest/      # 베타 테스트 대기 화면
+│   ├── ErrorPage.tsx  # 에러 페이지 컴포넌트
+│   └── LinguiClientProvider.tsx  # Lingui 클라이언트 프로바이더
 │
 ├── hooks/             # 커스텀 React 훅 (useSync, useNavigation 등)
 │
@@ -142,10 +153,12 @@ src/
 │   ├── env/           # 환경 탐지 (detectEnvironment, isMobile)
 │   ├── folder/        # 폴더 CRUD
 │   ├── media/         # 미디어 처리 (thumbnail, uploadcare)
+│   ├── membership/    # 멤버십 등록/관리
 │   ├── page/          # 페이지 관련
 │   ├── sample/        # 샘플 데이터
 │   ├── storage/       # 스토리지 관리 (clearStorage)
 │   ├── sync/          # 동기화 트리거
+│   ├── ui/            # UI 유틸 (toggleFullScreen)
 │   ├── usage/         # 사용량 추적
 │   ├── utils/         # 범용 유틸 (date, cookie, linkify)
 │   ├── validation/    # 유효성 검사
