@@ -132,9 +132,18 @@ src/
 │   └── layout/        # 레이아웃 컴포넌트
 │
 ├── functions/
-│   ├── ai/            # AI 서비스
+│   ├── ai/            # AI 서비스 (임베딩, 타이틀링)
+│   ├── api/           # API 응답 헬퍼 (response, error)
+│   ├── auth/          # 인증 관련 (requireLogin, checkSuperuser)
+│   ├── env/           # 환경 탐지 (detectEnvironment, isMobile)
+│   ├── folder/        # 폴더 CRUD
 │   ├── hooks/         # 커스텀 훅
-│   └── usage/         # 사용량 추적
+│   ├── media/         # 미디어 처리 (thumbnail, uploadcare)
+│   ├── storage/       # 스토리지 관리 (clearStorage)
+│   ├── sync/          # 동기화 트리거
+│   ├── usage/         # 사용량 추적
+│   ├── utils/         # 범용 유틸 (date, cookie, linkify)
+│   └── constants.ts   # 전역 상수
 │
 ├── watermelondb/      # 로컬 DB
 │   ├── model/         # 모델 정의
