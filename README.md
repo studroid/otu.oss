@@ -157,12 +157,13 @@ app/
 src/
 ├── components/         # React 컴포넌트
 ├── hooks/              # 커스텀 React 훅
-├── functions/          # 유틸리티 함수
+├── functions/          # 도메인별 비즈니스 로직
+├── utils/              # 클라이언트 유틸리티
+├── lib/                # 라이브러리 설정 (jotai, lingui)
 ├── watermelondb/       # 로컬 DB (오프라인 지원)
 └── debug/              # 디버그 로거들
 
 supabase/               # Supabase 설정 및 마이그레이션
-locales/                # 다국어 지원 (LinguiJS)
 ```
 
 ## 기여하기

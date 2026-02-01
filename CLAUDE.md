@@ -129,31 +129,36 @@ src/
 │   │   ├── shared/    # 공유 컴포넌트 (controls, displayType)
 │   │   └── router/    # React Router 설정
 │   ├── core/          # 핵심 컴포넌트 (Setting, fileUploader 등)
+│   ├── GlobalInput/   # 빠른 메모 입력
 │   └── layout/        # 레이아웃 컴포넌트
 │
-├── hooks/             # 커스텀 훅 (React 훅)
+├── hooks/             # 커스텀 React 훅 (useSync, useNavigation 등)
 │
-├── functions/
+├── functions/         # 도메인별 비즈니스 로직
 │   ├── ai/            # AI 서비스 (임베딩, 타이틀링)
 │   ├── api/           # API 응답 헬퍼 (response, error)
-│   ├── auth/          # 인증 관련 (requireLogin, checkSuperuser, addBetaTester)
+│   ├── auth/          # 인증 관련 (requireLogin, checkSuperuser)
 │   ├── env/           # 환경 탐지 (detectEnvironment, isMobile)
 │   ├── folder/        # 폴더 CRUD
 │   ├── media/         # 미디어 처리 (thumbnail, uploadcare)
+│   ├── page/          # 페이지 관련
+│   ├── sample/        # 샘플 데이터
 │   ├── storage/       # 스토리지 관리 (clearStorage)
 │   ├── sync/          # 동기화 트리거
 │   ├── usage/         # 사용량 추적
 │   ├── utils/         # 범용 유틸 (date, cookie, linkify)
 │   └── constants.ts   # 전역 상수
 │
-├── watermelondb/      # 로컬 DB
-│   ├── model/         # 모델 정의
-│   ├── control/       # DB 제어 로직
-│   ├── schema.ts      # 스키마 정의
-│   ├── sync.ts        # 동기화 로직 (40KB+)
-│   └── migrations.ts  # 마이그레이션
+├── utils/             # 클라이언트 유틸리티 (navigation, haptic 등)
+├── lib/               # 라이브러리 설정 (jotai, lingui, database)
+├── debug/             # 디버그 로거들
 │
-└── debug/             # 디버그 로거들
+└── watermelondb/      # 로컬 DB
+    ├── model/         # 모델 정의
+    ├── control/       # DB 제어 로직
+    ├── schema.ts      # 스키마 정의
+    ├── sync.ts        # 동기화 로직 (40KB+)
+    └── migrations.ts  # 마이그레이션
 ```
 
 ### 주요 패턴
