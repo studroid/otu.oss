@@ -40,7 +40,7 @@ const customJestConfig = {
         'route\.reminder_processed_at_concurrency\.test\.ts',
         'updateNotificationIdsBatch\.test\.ts',
         'calculate_progressive_interval\.test\.ts',
-        'withdraw/route\.test\.ts',
+        'withdraw/__tests__/route\.test\.ts',
     ],
     testTimeout: 30000, // 30초
 };

@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 import { renderHook, act } from '@testing-library/react';
 import { waitFor } from '@testing-library/dom';
-import { useReminderList } from './useReminderList';
+import { useReminderList } from '../useReminderList';
 
 // Mock 모듈들
 jest.mock('@/watermelondb/control/Alarm', () => ({

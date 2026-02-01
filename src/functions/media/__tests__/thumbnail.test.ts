@@ -1,4 +1,4 @@
-import { isUploadcareUrl, getThumbnailUrl } from './thumbnail';
+import { isUploadcareUrl, getThumbnailUrl } from '../thumbnail';
 
 describe('thumbnail utilities', () => {
     describe('isUploadcareUrl', () => {

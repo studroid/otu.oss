@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { describe, test, expect } from '@jest/globals';
-import { aiOptions, DEFAULT_LLM } from './model';
+import { aiOptions, DEFAULT_LLM } from '../model';
 
 describe('aiOptions', () => {
     test('최소 하나 이상의 AI 옵션이 있어야 함', () => {

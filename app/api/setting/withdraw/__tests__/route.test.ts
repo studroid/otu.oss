@@ -9,14 +9,14 @@ import {
     afterEach,
     jest,
 } from '@jest/globals';
-import { POST } from './route';
+import { POST } from '../route';
 import { NextRequest } from 'next/server';
 import { createSuperClient } from '@/supabase/utils/super';
 import * as uploadcare from '@/functions/media/uploadcare';
 import { testLogger } from '@/debug/test';
 
 // Uploadcare deleteFiles 함수 모킹 (ESM 호환)
-jest.mock('@/functions/uploadcare', () => ({
+jest.mock('@/functions/media/uploadcare', () => ({
     __esModule: true,
     deleteFiles: jest.fn(),
 }));

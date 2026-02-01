@@ -48,7 +48,7 @@ jest.mock('@nozbe/watermelondb/sync', () => ({
 }));
 
 // Mock database
-jest.mock('./index', () => ({
+jest.mock('../index', () => ({
     database: {
         collections: {
             get: jest.fn(() => ({
@@ -107,14 +107,14 @@ describe('WatermelonDB 동시 동기화 처리', () => {
     });
 
     test('단일 sync() 호출은 정상 작동해야 함', async () => {
-        const { sync } = require('./sync');
+        const { sync } = require('../sync');
 
         await expect(sync()).resolves.toBeDefined();
         expect(synchronizeCallCount).toBe(1);
     });
 
     test('동시에 2개의 sync() 호출 시 같은 Promise를 공유하여 중복 방지', async () => {
-        const { sync } = require('./sync');
+        const { sync } = require('../sync');
 
         // 두 개의 sync를 동시에 시작
         const sync1Promise = sync();
@@ -134,7 +134,7 @@ describe('WatermelonDB 동시 동기화 처리', () => {
     });
 
     test('3개의 동시 sync() 호출 시 같은 Promise를 공유하여 중복 방지', async () => {
-        const { sync } = require('./sync');
+        const { sync } = require('../sync');
 
         // 세 개의 sync를 동시에 시작
         const promises = [sync(), sync(), sync()];
@@ -152,7 +152,7 @@ describe('WatermelonDB 동시 동기화 처리', () => {
     });
 
     test('순차적인 sync() 호출은 각각 실행됨', async () => {
-        const { sync } = require('./sync');
+        const { sync } = require('../sync');
 
         // 순차적으로 실행 (각 sync가 완료된 후 다음 호출)
         await expect(sync()).resolves.toBeDefined();
@@ -164,7 +164,7 @@ describe('WatermelonDB 동시 동기화 처리', () => {
     });
 
     test('짧은 시간 간격으로 sync() 호출 시 같은 Promise를 공유', async () => {
-        const { sync } = require('./sync');
+        const { sync } = require('../sync');
 
         // 첫 번째 호출
         const sync1 = sync();
